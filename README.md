@@ -53,4 +53,4 @@ results, err := client.ReadData(00000000, 0, 0, 0, 0, 0, 0)
 
 References
 ----------
--   [DLT645-2007](http://szones.hithium.cn/wiki/#/team/W6XnLKpQ/space/SL7EaZLL/page/WiHK3QvR?a=preview&resource=7VxpRTin)
+* [DLT645-2007](https://www.toky.com.cn/up_pic/2020_12_15_12243_142130.pdf)
