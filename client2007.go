@@ -5,6 +5,8 @@ import (
 	"io"
 	"slices"
 	"time"
+
+	"github.com/xgbt/dlt645-go/utils"
 )
 
 const (
@@ -70,7 +72,7 @@ func (dtl *rtuPackager) Encode(frame *FramePayLoad) (raw []byte, err error) {
 	raw = make([]byte, rawLen)
 
 	raw[0] = FrameHead
-	slaveAddrBCD := BCDFromUint(dtl.SlaveAddr, 6)
+	slaveAddrBCD := utils.BCDFromUint(dtl.SlaveAddr, 6)
 	raw[1] = slaveAddrBCD[5]
 	raw[2] = slaveAddrBCD[4]
 	raw[3] = slaveAddrBCD[3]
@@ -96,7 +98,7 @@ func (dtl *rtuPackager) Encode(frame *FramePayLoad) (raw []byte, err error) {
 	copy(raw[10:], dataDomain)
 
 	// append check sum
-	checkSum := generateCheckSum(raw[:rawLen-2])
+	checkSum := utils.GenerateCheckSum(raw[:rawLen-2])
 	raw[rawLen-2] = checkSum
 	raw[rawLen-1] = FrameTail
 
@@ -116,7 +118,7 @@ func (dtl *rtuPackager) Encode(frame *FramePayLoad) (raw []byte, err error) {
 func (dlt *rtuPackager) Decode(raw []byte) (payload *FramePayLoad, err error) {
 	length := len(raw)
 	// Calculate checksum
-	checkSum := generateCheckSum(raw[:length-2])
+	checkSum := utils.GenerateCheckSum(raw[:length-2])
 
 	if checkSum != raw[length-2] {
 		err = fmt.Errorf("dlt645: response check sum '%v' does not match expected '%v'", raw[length-2], checkSum)

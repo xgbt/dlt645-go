@@ -1,6 +1,6 @@
-package dlt645
+package utils
 
-func generateCheckSum(msg []byte) uint8 {
+func GenerateCheckSum(msg []byte) uint8 {
 	cs := uint8(0)
 
 	for _, v := range msg {

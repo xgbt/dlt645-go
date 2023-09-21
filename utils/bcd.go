@@ -1,4 +1,4 @@
-package dlt645
+package utils
 
 func pow100(power byte) uint64 {
 	res := uint64(1)
@@ -38,22 +38,6 @@ func BCDFromUint64(value uint64) []byte {
 	return BCDFromUint(value, 8)
 }
 
-func toUint(value []byte, size int) uint64 {
-	len := len(value)
-	if len > size {
-		value = value[len-size:]
-	}
-	res := uint64(0)
-	for i, b := range value {
-		hi, lo := b>>4, b&0x0f
-		if hi > 9 || lo > 9 {
-			return 0
-		}
-		res += uint64(hi*10+lo) * pow100(byte(len-i)-1)
-	}
-	return res
-}
-
 func BCDToUint8(value byte) uint8 {
 	return uint8(toUint([]byte{value}, 1))
 }
@@ -68,4 +52,20 @@ func BCDToUint32(value []byte) uint32 {
 
 func BCDToUint64(value []byte) uint64 {
 	return toUint(value, 8)
+}
+
+func toUint(bytes []byte, size int) uint64 {
+	len := len(bytes)
+	if len > size {
+		bytes = bytes[len-size:]
+	}
+	res := uint64(0)
+	for i, b := range bytes {
+		hi, lo := b>>4, b&0x0f
+		if hi > 9 || lo > 9 {
+			return 0
+		}
+		res += uint64(hi*10+lo) * pow100(byte(len-i)-1)
+	}
+	return res
 }
