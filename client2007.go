@@ -3,6 +3,7 @@ package dlt645
 import (
 	"fmt"
 	"io"
+	"slices"
 	"time"
 )
 
@@ -91,6 +92,7 @@ func (dtl *rtuPackager) Encode(frame *FramePayLoad) (raw []byte, err error) {
 	for k, v := range frame.Data {
 		dataDomain[k] = v + 0x33
 	}
+	slices.Reverse(dataDomain)
 	copy(raw[10:], dataDomain)
 
 	// append check sum
@@ -158,7 +160,7 @@ func (dlt *rtuPackager) Verify(request []byte, response []byte) (err error) {
 	}
 	// Slave address must match
 	for k, v := range response[1:7] {
-		if v != request[k] {
+		if v != request[k+1] {
 			err = fmt.Errorf("dlt: response slave id '%v' does not match request '%v'", response[1:7], request[1:7])
 			return
 		}
