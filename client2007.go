@@ -291,7 +291,7 @@ func (dlt *rtuSerialTransporter) ProcessPacket(data []byte) (result []byte, err 
 		err = fmt.Errorf("dlt645: is not valid frame")
 		return
 	}
-	result = data[frameStart:frameEnd]
+	result = data[frameStart : frameEnd+1]
 	return
 }
 
