@@ -51,6 +51,7 @@ func (dtl *client) ReadData(dataMarker uint32, blockQuantity uint8, year, month,
 		results = append(results, response.Data...)
 	}
 
+	results = results[4:]
 	return
 }
 
