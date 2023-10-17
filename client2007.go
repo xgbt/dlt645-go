@@ -3,7 +3,7 @@ package dlt645
 import (
 	"fmt"
 	"io"
-	"slices"
+	"reflect"
 	"time"
 
 	"github.com/xgbt/dlt645-go/utils"
@@ -94,7 +94,7 @@ func (dtl *rtuPackager) Encode(frame *FramePayLoad) (raw []byte, err error) {
 	for k, v := range frame.Data {
 		dataDomain[k] = v + 0x33
 	}
-	slices.Reverse(dataDomain)
+	Reverse(dataDomain)
 	copy(raw[10:], dataDomain)
 
 	// append check sum
@@ -103,6 +103,21 @@ func (dtl *rtuPackager) Encode(frame *FramePayLoad) (raw []byte, err error) {
 	raw[rawLen-1] = FrameTail
 
 	return
+}
+
+// Reverse reverses the elements of s in place.
+func Reverse(s interface{}) {
+	// Check if s is a slice
+	if reflect.TypeOf(s).Kind() != reflect.Slice {
+		panic("Reverse: s is not a slice")
+	}
+	// Get the length and swap function of s
+	n := reflect.ValueOf(s).Len()
+	swap := reflect.Swapper(s)
+	// Swap the elements from both ends until the middle
+	for i, j := 0, n-1; i < j; i, j = i+1, j-1 {
+		swap(i, j)
+	}
 }
 
 // Decode a DTL645-2007 frame:
